@@ -1,0 +1,13 @@
+cfgv==3.4.0
+distlib==0.3.8
+Faker==21.0.0
+filelock==3.13.1
+identify==2.5.33
+nodeenv==1.8.0
+platformdirs==4.1.0
+pre-commit==3.5.0
+python-dateutil==2.8.2
+PyYAML==6.0.1
+six==1.16.0
+typing-extensions==4.9.0
+virtualenv==20.25.0
