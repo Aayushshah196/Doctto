@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, Dict, Tuple
+from typing import Any, Dict, List, Tuple
 
 from faker import Faker
 from providers import SYNTHETIC_GENERATOR
@@ -42,7 +42,7 @@ class BBox:
 
 @dataclass
 class DataType:
-    name: str = "string"
+    value: str = "string"
 
 
 @dataclass
@@ -84,7 +84,7 @@ class FakerStrategy:
         Returns:
             str: The generated Faker value.
         """
-        return FakerStrategy._DATA_GENERATOR.get(data_type)
+        return FakerStrategy._DATA_GENERATOR.get(data_type.value)
 
     def generate_value(self):
         return self.generate_method()
@@ -139,12 +139,40 @@ class FieldInfo:
     v_align: Alignment = field(default_factory=Alignment)
     spacing: Spacing = field(default_factory=Spacing)
     metadata: FieldMetadata = field(default_factory=FieldMetadata)
-    _synthetic_generation_method = None
+    __synthetic_generation_method = None
 
     def __post_init__(self):
-        self._synthetic_generation_method = FakerStrategy.default_factory(
+        ## Standardizing the bbox attribute
+        if not isinstance(self.bbox, BBox):
+            if isinstance(self.bbox, (Tuple, List)):
+                self.bbox = BBox(*self.bbox)
+            elif isinstance(self.bbox, dict):
+                self.bbox = BBox(**self.bbox)
+        ## Standardizing the data_type attribute
+        if not isinstance(self.data_type, DataType):
+            self.data_type = DataType(self.data_type)
+        ## Standardizing the fontsize attribute
+        if not isinstance(self.data_type, FontSize):
+            self.fontsize = FontSize(self.fontsize)
+        ## Standardizing the h_align attribute
+        if not isinstance(self.h_align, Alignment):
+            self.h_align = Alignment(self.h_align)
+        ## Standardizing the v_align attribute
+        if not isinstance(self.v_align, Alignment):
+            self.v_align = Alignment(self.v_align)
+        ## Standardizing the spacing attribute
+        if not isinstance(self.v_align, Spacing):
+            self.spacing = Spacing(self.spacing)
+
+        self.__synthetic_generation_method = FakerStrategy.default_factory(
             self.data_type
         )
+
+    def __str__(self):
+        return f"( Name: {self.name} | Data Type: {self.data_type.value} )"
+
+    def __repr__(self):
+        return f"( Name: {self.name} | Data Type: {self.data_type.value} )"
 
     @property
     def Text(self):
@@ -155,7 +183,7 @@ class FieldInfo:
         return self.Text
 
     def synthesize(self):
-        self.value = self._synthetic_generation_method()
+        self.value = self.__synthetic_generation_method()
 
     def __setitem__(self, index, value):
         if hasattr(self, index):
@@ -168,12 +196,12 @@ class FieldInfo:
             return getattr(self, index)
         return self.metadata.get(index)
 
-    def add_new_metadata(self, custom_key, custom_value):
+    def set_metadata(self, custom_key, custom_value):
         self.metadata.add_key_value(custom_key, custom_value)
 
 
 if __name__ == "__main__":
-    name_field = FieldInfo("name", data_type="name")
+    name_field = FieldInfo("name", data_type=DataType("postalcode"))
     print(name_field)
     print("=============================================")
     print("TEXT: ", name_field.text)

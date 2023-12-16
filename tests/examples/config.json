@@ -1,0 +1,30 @@
+{
+  "name": "Example JSON",
+  "copies": 5,
+  "fields": [
+    {
+      "name": "customer name",
+      "prefix": "Mrs. ",
+      "postfix": " Johnson",
+      "bbox": {
+        "x0": 15,
+        "y0": 25,
+        "x2": 120,
+        "y2": 60
+      },
+      "data_type": "name"
+    },
+    {
+      "name": "customer address",
+      "prefix": "",
+      "postfix": "",
+      "bbox": {
+        "x0": 15,
+        "y0": 25,
+        "x2": 120,
+        "y2": 60
+      },
+      "data_type": "address"
+    }
+  ]
+}
