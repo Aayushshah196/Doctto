@@ -199,6 +199,30 @@ class FieldInfo:
     def set_metadata(self, custom_key, custom_value):
         self.metadata.add_key_value(custom_key, custom_value)
 
+    def to_dict(self):
+        data = {
+            "name": self.name,
+            "value": self.text,
+            "data_type": self.data_type.value,
+            "bbox": self.bbox.to_tuple(),
+        }
+        return data
+
+
+@dataclass
+class SyntheticDocument:
+    fields: List[FieldInfo] = field(default_factory=[])
+
+    def synthesize_data(self, copies: int = 1):
+        data = []
+        for i in range(copies):
+            _single_doc = {}
+            for field in self.fields:
+                field.synthesize()
+                _single_doc[field.name] = field.to_dict()
+            data.append(_single_doc)
+        return data
+
 
 if __name__ == "__main__":
     name_field = FieldInfo("name", data_type=DataType("postalcode"))
