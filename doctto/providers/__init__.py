@@ -1,13 +1,18 @@
 from faker import Faker
 from faker.providers import BaseProvider
 
-_fake_gen = Faker()
+from .hexprovider import HexadecimalProvider
+
+__all__ = ["HexadecimalProvider", "SYNTHETIC_GENERATOR"]
 
 
-def get_callable_names_for_providers(faker):
+__fake_gen = Faker()
+
+
+def get_callable_names_for_providers(generator):
     callable_names = []
 
-    for provider_cls in faker.get_providers():
+    for provider_cls in generator.get_providers():
         # Get the callable names for fake methods
         provider_methods = [
             method
@@ -22,9 +27,13 @@ def get_callable_names_for_providers(faker):
 
 
 # Add any new providers in this file in the form
-# faker.add_provider(PROVIDER_NAME)
+__fake_gen.add_provider(HexadecimalProvider)
 
 SYNTHETIC_GENERATOR = {
-    generator_name: getattr(_fake_gen, generator_name, _fake_gen.text)
-    for generator_name in get_callable_names_for_providers(_fake_gen)
+    generator_name: getattr(__fake_gen, generator_name, __fake_gen.text)
+    for generator_name in get_callable_names_for_providers(__fake_gen)
 }
+
+
+if __name__ == "__main__":
+    print("Random Hex string: ", SYNTHETIC_GENERATOR["hexadecimal_string"]())

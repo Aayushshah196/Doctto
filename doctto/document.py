@@ -36,23 +36,24 @@ if __name__ == "__main__":
 
     def main():
         # # Using Yaml Config
-        # yaml_config_path = "tests/examples/config.yaml"
-        # yaml_document = Document.create_document(yaml_config_path)
-        # print("DOCUMENT CONFIG: ", yaml_document)
-        # print("=========================================")
+        yaml_config_path = "tests/examples/config.yaml"
+        yaml_document = Document.create_document(yaml_config_path)
+        print("DOCUMENT CONFIG: ", yaml_document)
+        logger.info(yaml_document.synthesize_data())
+        print("=========================================")
 
         # # Using Json Config
-        json_config_path = "tests/examples/config.json"
+        # json_config_path = "tests/examples/config.json"
         # json_document = Document.create_document(json_config_path)
         # print("DOCUMENT CONFIG: ", json_document)
         # print("=========================================")
 
         # Using Dict Config
-        with open(json_config_path, "r") as f:
-            config = json.load(f)
-        dict_document = Document.create_document(config)
-        print("DOCUMENT CONFIG: ", dict_document)
-        print("=========================================")
-        logger.info(dict_document.synthesize_data())
+        # with open(json_config_path, "r") as f:
+        #     config = json.load(f)
+        # dict_document = Document.create_document(config)
+        # print("DOCUMENT CONFIG: ", dict_document)
+        # logger.info(dict_document.synthesize_data())
+        # print("=========================================")
 
     main()
