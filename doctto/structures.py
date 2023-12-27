@@ -1,7 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Tuple
 
-from faker import Faker
 from providers import SYNTHETIC_GENERATOR
 
 
@@ -175,12 +174,8 @@ class FieldInfo:
         return f"( Name: {self.name} | Data Type: {self.data_type.value} )"
 
     @property
-    def Text(self):
-        return self.prefix + self.value + self.postfix
-
-    @property
     def text(self):
-        return self.Text
+        return self.prefix + self.value + self.postfix
 
     def synthesize(self):
         self.value = self.__synthetic_generation_method()
